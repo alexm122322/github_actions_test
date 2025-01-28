@@ -1,0 +1,79 @@
+name: Second Pull Request Merge Workflow
+on:
+  pull_request:
+    branches:
+      - master
+    types: [ closed ]
+env:
+  CI: true
+jobs:
+  createReleasePullRequest:
+    if: "contains(join(github.event.pull_request.labels.*.name, ','), 'Release') && github.event.pull_request.merged == true"
+    name: 'Create Release Pull Request'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Git Identity
+        run: |
+          git config --global user.name 'alexm122322'
+          git config --global user.email 'alexm122322@gmail.com'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Pull Request Description
+        id: get_description
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash -ex {0}
+        run: |
+          pr_metadata=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+           -H "Accept: application/vnd.github+json" \
+           "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}")
+
+          # Extract the description (body field)
+          DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
+
+          if [ "$DESCRIPTION" != "null" ]; then
+            echo "Pull Request Description: $DESCRIPTION"
+          else
+            echo "No description provided in the pull request. The 'release/next' branch must provide a description for the correct generation of the 'CHANGELOG.md' file."
+            exit 1
+          fi
+          
+          echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
+
+      - name: Update Release Pull Request Description
+        id: get_description
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash -ex {0}
+        run: |
+          TARGET_LABEL="Type: Release"
+          
+          PRS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" | jq -r ".[] | select(.labels[].name == \"$TARGET_LABEL\") | .number")
+
+          if [ -z "$PRS" ]; then
+            echo "No PR found with label '$TARGET_LABEL'"
+            exit 1
+          fi
+
+          # Use the first PR that matches the label
+          TARGET_PR_NUMBER=$(echo "$PRS" | head -n 1)
+          
+          pr_metadata=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+           -H "Accept: application/vnd.github+json" \
+           "https://api.github.com/repos/${{ github.repository }}/pulls/$TARGET_PR_NUMBER")
+
+          # Extract the description (body field)
+          DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
+          
+          pr_metadata=$(curl -s 
+           -X PATCH \
+           -H "Authorization: Bearer $GITHUB_TOKEN" \
+           -H "Accept: application/vnd.github+json" \
+           "https://api.github.com/repos/${{ github.repository }}/pulls/$TARGET_PR_NUMBER" \
+            -d '{"body":"$DESCRIPTION\n${{ steps.get_description.outputs.DESCRIPTION }}"}'
+          )
