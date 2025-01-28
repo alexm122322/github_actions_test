@@ -96,18 +96,12 @@ jobs:
         shell: bash -ex {0}
         run: |
           fileData=$(cat ${{env.DESCRIPTION_FILE}})
-  
-          while read -r line; do lines+=("$line"); done <<<"$string"
-  
-          echo 'DESCRIPTION<<EOF' >> $GITHUB_OUTPUT
           
-          for line in $lines;
-          do
-            echo "$line"
-            echo "$line" >> $GITHUB_OUTPUT
-          done
-  
-          echo 'EOF' >> $GITHUB_OUTPUT
+          {
+            echo 'test<<DESCRIPTION'
+            echo "${fileData}"
+            echo EOF
+          } >> $GITHUB_OUTPUT
 
       - name: Debug Description
         shell: bash -ex {0}
