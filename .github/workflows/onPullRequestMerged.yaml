@@ -124,7 +124,8 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
-          body:  '${{ steps.full_description.outputs.DESCRIPTION }}'
+          body: |
+            ${{ steps.full_description.outputs.DESCRIPTION }}
 
           labels: "Type: Release"
           branch: "release/next"
