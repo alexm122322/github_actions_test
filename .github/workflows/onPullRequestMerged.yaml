@@ -101,8 +101,8 @@ jobs:
         run: |
           curr_descr="${{ steps.get_current_description.outputs.DESCRIPTION }}"
           pr_descr="${{ steps.get_description.outputs.DESCRIPTION }}"
-          if [ -z "$pr_descr" ]; then
-            DESCRIPTION="$pr_descr"
+          if [ -z "$curr_descr" ]; then
+             printf -v DESCRIPTION "## v${{ steps.incremented-version.outputs.result }}\n$pr_descr"
           else
             printf -v DESCRIPTION "$curr_descr\n$pr_descr"
           fi
@@ -121,7 +121,7 @@ jobs:
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
           body: |
-            ## v${{ steps.incremented-version.outputs.result }}
+            
             ${{ steps.full_description.outputs.DESCRIPTION }}
 
           labels: "Type: Release"
