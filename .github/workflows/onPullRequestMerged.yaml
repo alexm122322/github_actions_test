@@ -92,7 +92,7 @@ jobs:
           title: 'v${{ steps.incremented-version.outputs.result }}'
           body: |
             ## v${{ steps.incremented-version.outputs.result }}
-            ${{ steps.get_description.outputs.$DESCRIPTION }}
+            ${{ steps.get_description.outputs.DESCRIPTION }}
 
           labels: "Type: Release"
           branch: "release/next"
