@@ -109,6 +109,7 @@ jobs:
           
           echo "DESCRIPTION<<EOF" >> $GITHUB_OUTPUT
           echo $desc >> $GITHUB_OUTPUT
+          echo $desc >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Debug Description
