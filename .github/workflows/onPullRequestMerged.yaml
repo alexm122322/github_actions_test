@@ -104,7 +104,7 @@ jobs:
           if [ -z "$curr_descr" ]; then
              printf -v DESCRIPTION "## v${{ steps.incremented-version.outputs.result }}\n$pr_descr"
           else
-            printf -v DESCRIPTION "$curr_descr\n$pr_descr"
+             printf -v DESCRIPTION "$curr_descr\n$pr_descr"
           fi
           echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
             
@@ -120,9 +120,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
-          body: |
-            
-            ${{ steps.full_description.outputs.DESCRIPTION }}
+          body: '${{ steps.full_description.outputs.DESCRIPTION }}'
 
           labels: "Type: Release"
           branch: "release/next"
