@@ -101,14 +101,15 @@ jobs:
         run: |
           curr_descr="${{ steps.get_current_description.outputs.DESCRIPTION }}"
           pr_descr="${{ steps.get_description.outputs.DESCRIPTION }}"
-          if [ -z "$curr_descr" ]; then
+          if [  "$curr_descr" == "" ]; then
              printf -v DESCRIPTION "## v${{ steps.incremented-version.outputs.result }}\n$pr_descr"
           else
              printf -v DESCRIPTION "$curr_descr\n$pr_descr"
           fi
           echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
             
-      
+      - name: Debug Description
+        run: echo ${{ steps.full_description.outputs.DESCRIPTION }}
 
       - name: Create Release Pull Request
         id: cpr
@@ -120,7 +121,8 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
-          body: '${{ steps.full_description.outputs.DESCRIPTION }}'
+          body: |
+            ${{ steps.full_description.outputs.DESCRIPTION }}
 
           labels: "Type: Release"
           branch: "release/next"
