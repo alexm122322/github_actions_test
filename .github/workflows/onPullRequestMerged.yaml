@@ -103,10 +103,12 @@ jobs:
           
           for line in $lines;
           do
+            echo "$line"
             echo "$line" >> $GITHUB_OUTPUT
           done
   
           echo 'EOF' >> $GITHUB_OUTPUT
+
       - name: Debug Description
         shell: bash -ex {0}
         run: |
