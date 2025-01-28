@@ -45,7 +45,7 @@ jobs:
           echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
 
       - name: Update Release Pull Request Description
-        id: get_description
+        id: update_release_pr_descriptions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash -ex {0}
