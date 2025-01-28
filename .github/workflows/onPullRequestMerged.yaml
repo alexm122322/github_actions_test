@@ -64,7 +64,7 @@ jobs:
             exit 1
           fi
           
-          echo "::set-output name=$DESCRIPTION::${$DESCRIPTION}"
+          echo "::set-output name=DESCRIPTION::${$DESCRIPTION}"
 
       - name: Create Release Pull Request
         id: cpr
