@@ -44,8 +44,6 @@ jobs:
           
           echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
 
-
-
       - name: Update Release Pull Request Description
         id: update_release_pr_descriptions
         env:
