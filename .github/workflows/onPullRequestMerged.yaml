@@ -73,6 +73,7 @@ jobs:
           DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
           echo "$DESCRIPTION" > ${{ env.DESCRIPTION_FILE }}
 
+
       - name: Current Pull Request Description
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
