@@ -98,7 +98,7 @@ jobs:
           fileData=$(cat ${{env.DESCRIPTION_FILE}})
           
           {
-            echo 'test<<DESCRIPTION'
+            echo 'DESCRIPTION<<EOF'
             echo "${fileData}"
             echo EOF
           } >> $GITHUB_OUTPUT
