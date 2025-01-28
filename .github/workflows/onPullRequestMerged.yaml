@@ -10,23 +10,10 @@ jobs:
   createReleasePullRequest:
     if: "!contains(join(github.event.pull_request.labels.*.name, ','), 'Release') && github.event.pull_request.merged == true"
     name: 'Create Release Pull Request'
-    runs-on: 'macos-latest-large'
+    runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          architecture: x64
-          flutter-version: 3.22.2
-
-      - name: Git Identity
-        run: |
-          git config --global user.name 'frontegg'
-          git config --global user.email 'frontegg@users.noreply.github.com'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Incremented version
         uses: actions/github-script@v6
@@ -44,15 +31,6 @@ jobs:
             fs.writeFileSync('./pubspec.yaml', content);
             fs.writeFileSync('version.txt', newVersion);
             return newVersion;
-
-      - name: Update dependencies and lock files
-        run: |
-          flutter pub get
-
-      - name: Update iOS podspec
-        run: |
-          VERSION=$(cat version.txt)
-          sed -i '' "s/^  s.version.*$/  s.version      = '${VERSION}'/" ios/frontegg_flutter.podspec
 
       - name: Commit changes
         shell: bash -ex {0}
