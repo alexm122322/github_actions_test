@@ -99,15 +99,15 @@ jobs:
         id: full_description
         shell: bash -ex {0}
         run: |
-          curr_descr="${{ steps.get_current_description.outputs.DESCRIPTION }}"
-          pr_descr="${{ steps.get_description.outputs.DESCRIPTION }}"
-          if [  "$curr_descr" == "" ]; then
-             printf -v DESCRIPTION "## v${{ steps.incremented-version.outputs.result }}\n$pr_descr"
+          curr_desc="${{ steps.get_current_description.outputs.DESCRIPTION }}"
+          pr_desc="${{ steps.get_description.outputs.DESCRIPTION }}"
+          if [  "$curr_desc" == "" ]; then
+             printf -v desc "## v${{ steps.incremented-version.outputs.result }}\n$pr_desc"
           else
-             printf -v DESCRIPTION "$curr_descr\n$pr_descr"
+             printf -v desc "$curr_desc\n$pr_desc"
           fi
           
-          echo '$DESCRIPTION' >> $DESCRIPTION
+          echo '$desc' >> $DESCRIPTION
             
       - name: Debug Description
         run: echo ${{ steps.full_description.outputs.DESCRIPTION }}
