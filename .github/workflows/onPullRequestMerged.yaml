@@ -91,8 +91,15 @@ jobs:
             echo "No description provided"
           fi
 
-#      - name: Debug Description
-#        run: cut ${{ env.DESCRIPTION_FILE }}
+      - name: Debug Description
+        id: get_description
+        shell: bash -ex {0}
+        run: |
+          fileData=$(cat .metadata)
+          echo 'DESCRIPTION<<EOF' >> $GITHUB_OUTPUT
+          while read -r line;  echo "$line" >> $GITHUB_OUTPUT done <<<"$fileData"
+          echo 'EOF' >> $GITHUB_OUTPUT
+          
 
       - name: Create Release Pull Request
         id: cpr
@@ -106,7 +113,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
-          body: '${{ env.DESCRIPTION }}'
+          body: '${{ steps.get_description.outputs.DESCRIPTION }}'
 
           labels: "Type: Release"
           branch: "release/next"
