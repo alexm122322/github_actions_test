@@ -99,14 +99,14 @@ jobs:
         id: full_description
         shell: bash -ex {0}
         run: |
-          curr_descr = ${{ steps.get_current_description.outputs.DESCRIPTION }}
-          pr_descr = ${{ steps.get_description.outputs.DESCRIPTION }}
+          curr_descr="${{ steps.get_current_description.outputs.DESCRIPTION }}"
+          pr_descr="${{ steps.get_description.outputs.DESCRIPTION }}"
           if [ -z "$pr_descr" ]; then
             DESCRIPTION="$pr_descr"
-            echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
           else
             DESCRIPTION="$pr_descr\n$pr_descr"
           fi
+          echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
             
       
 
