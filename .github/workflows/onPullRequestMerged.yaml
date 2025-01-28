@@ -58,7 +58,7 @@ jobs:
 
           if [ -z "$PRS" ]; then
             echo "No PR found with label '$TARGET_LABEL'"
-            echo ## v${{ steps.incremented-version.outputs.result }} >> ${{ env.DESCRIPTION_FILE }}
+            echo "## v${{ steps.incremented-version.outputs.result }}\n" >> ${{ env.DESCRIPTION_FILE }}
             exit 0
           fi
 
@@ -71,7 +71,7 @@ jobs:
 
           # Extract the description (body field)
           DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
-          echo $DESCRIPTION >> ${{ env.DESCRIPTION_FILE }}
+          echo '$DESCRIPTION\n' >> ${{ env.DESCRIPTION_FILE }}
 
       - name: Current Pull Request Description
         env:
