@@ -106,7 +106,8 @@ jobs:
           else
              printf -v DESCRIPTION "$curr_descr\n$pr_descr"
           fi
-          echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
+          
+          echo '$DESCRIPTION' >> $DESCRIPTION
             
       - name: Debug Description
         run: echo ${{ steps.full_description.outputs.DESCRIPTION }}
@@ -121,8 +122,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
-          body: |
-            ${{ steps.full_description.outputs.DESCRIPTION }}
+          body:  '${{ steps.full_description.outputs.DESCRIPTION }}'
 
           labels: "Type: Release"
           branch: "release/next"
