@@ -107,7 +107,10 @@ jobs:
           done
   
           echo 'EOF' >> $GITHUB_OUTPUT
-          
+      - name: Debug Description
+        shell: bash -ex {0}
+        run: |
+          echo '${{ steps.get_description.outputs.DESCRIPTION }}'
 
       - name: Create Release Pull Request
         id: cpr
