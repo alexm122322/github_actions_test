@@ -95,15 +95,14 @@ jobs:
         id: get_description
         shell: bash -ex {0}
         run: |
-          fileData=$(cat .metadata)
+          fileData=$(cat ${{env.DESCRIPTION_FILE}})
           echo 'DESCRIPTION<<EOF' >> $GITHUB_OUTPUT
-          while read -r line;  echo "$line" >> $GITHUB_OUTPUT done <<<"$fileData"
+          while read -r line; echo "$line" >> $GITHUB_OUTPUT done <<<"$fileData"
           echo 'EOF' >> $GITHUB_OUTPUT
           
 
       - name: Create Release Pull Request
         id: cpr
-        env: DESCRIPTION=cut ${{ env.DESCRIPTION_FILE }}
 
         uses: peter-evans/create-pull-request@v3.5.1
         with:
