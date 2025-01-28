@@ -25,6 +25,7 @@ jobs:
 
           # Extract the description (body field)
           DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
+          echo $DESCRIPTION
 
           if [ "$DESCRIPTION" != "null" ]; then
             echo "Pull Request Description: $DESCRIPTION"
