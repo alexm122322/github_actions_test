@@ -7,8 +7,8 @@ on:
 env:
   CI: true
 jobs:
-  createReleasePullRequest:
-    if: "!contains(join(github.event.pull_request.labels.*.name, ','), 'Release') && github.event.pull_request.merged == false"
+  updateReleasePullRequestDescription:
+    if: "contains(join(github.event.pull_request.labels.*.name, ','), 'Release') && github.event.pull_request.merged == false"
     name: 'Create Release Pull Request'
     runs-on: 'ubuntu-latest'
     steps:
