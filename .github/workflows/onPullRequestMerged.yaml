@@ -11,6 +11,8 @@ jobs:
     if: "!contains(join(github.event.pull_request.labels.*.name, ','), 'Release') && github.event.pull_request.merged == true"
     name: 'Create Release Pull Request'
     runs-on: 'ubuntu-latest'
+    env:
+      DESCRIPTION_FILE: ./description.txt
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -44,30 +46,7 @@ jobs:
         run: |
           git add . && git commit -m "chore(release): publish ${{ steps.incremented-version.outputs.result }}"
 
-      - name: Get Pull Request Description
-        id: get_description
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash -ex {0}
-        run: |
-          pr_metadata=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-           -H "Accept: application/vnd.github+json" \
-           "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}")
-
-          # Extract the description (body field)
-          DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
-
-          if [ "$DESCRIPTION" != "null" ]; then
-            echo "Pull Request Description: $DESCRIPTION"
-          else
-            echo "No description provided in the pull request. The 'release/next' branch must provide a description for the correct generation of the 'CHANGELOG.md' file."
-            exit 1
-          fi
-          
-          echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
-
-      - name: Get Pull Request Description
-        id: get_current_description
+      - name: Release Pull Request Description
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash -ex {0}
@@ -79,8 +58,7 @@ jobs:
 
           if [ -z "$PRS" ]; then
             echo "No PR found with label '$TARGET_LABEL'"
-            DESCRIPTION=""
-            echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
+            echo ## v${{ steps.incremented-version.outputs.result }} >> ${{ env.DESCRIPTION_FILE }}
             exit 0
           fi
 
@@ -93,29 +71,28 @@ jobs:
 
           # Extract the description (body field)
           DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
-          echo "::set-output name=DESCRIPTION::${DESCRIPTION}"
+          echo $DESCRIPTION >> ${{ env.DESCRIPTION_FILE }}
 
-      - name: Create Full Description
-        id: full_description
+      - name: Current Pull Request Description
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash -ex {0}
         run: |
-          curr_desc="${{ steps.get_current_description.outputs.DESCRIPTION }}"
-          pr_desc="${{ steps.get_description.outputs.DESCRIPTION }}"
-          if [  "$curr_desc" == "" ]; then
-             printf -v desc "## v${{ steps.incremented-version.outputs.result }}\n$pr_desc"
-          else
-             printf -v desc "$curr_desc\n$pr_desc"
-          fi
-          
-          echo "DESCRIPTION=$desc" >> "$GITHUB_OUTPUT"
+          pr_metadata=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+           -H "Accept: application/vnd.github+json" \
+           "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}")
 
-#          echo "DESCRIPTION<<EOF" >> $GITHUB_OUTPUT
-#          echo $desc >> $GITHUB_OUTPUT
-#          echo $desc >> $GITHUB_OUTPUT
-#          echo "EOF" >> $GITHUB_OUTPUT
+          # Extract the description (body field)
+          DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
+
+          if [ "$DESCRIPTION" != "null" ]; then
+            echo $DESCRIPTION > ${{ env.DESCRIPTION_FILE }}
+          else
+            echo "No description provided"
+          fi
 
       - name: Debug Description
-        run: echo ${{ steps.full_description.outputs.DESCRIPTION }}
+        run: cut ${{ env.DESCRIPTION_FILE }}
 
       - name: Create Release Pull Request
         id: cpr
@@ -127,8 +104,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
-          body: |
-            ${{ steps.full_description.outputs.DESCRIPTION }}
+          body: '$(cut ${{ env.DESCRIPTION_FILE }})'
 
           labels: "Type: Release"
           branch: "release/next"
