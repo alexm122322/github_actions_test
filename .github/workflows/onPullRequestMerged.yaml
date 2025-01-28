@@ -71,7 +71,7 @@ jobs:
 
           # Extract the description (body field)
           DESCRIPTION=$(echo "$pr_metadata" | jq -r '.body')
-          echo '$DESCRIPTION\n' > ${{ env.DESCRIPTION_FILE }}
+          echo "$DESCRIPTION\n" > ${{ env.DESCRIPTION_FILE }}
 
       - name: Current Pull Request Description
         env:
