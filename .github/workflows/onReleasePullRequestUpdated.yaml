@@ -15,10 +15,10 @@ jobs:
       CHANGELOG_FILE: ./CHANGELOG.md
       CHANGELOG_OLD_FILE: ./CHANGELOG.old.md
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          ref: release/next
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Git Identity
         run: |
@@ -51,14 +51,9 @@ jobs:
             exit 1
           fi
 
-      - name: Commit changes
-        shell: bash
-        run: |
-          git add CHANGELOG.md
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-          
-          git commit -m "chore(release): UPDATED CHANGELOG.md"
-          git push origin "${{ github.ref_name }}"
+      - uses: EndBug/add-and-commit@v9
+        with:
+          author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
+          committer_name: GitHub <noreply@github.com>
+          message: "chore(release): Updated CHANGELOG.md"
+          add: "CHANGELOG.md"
