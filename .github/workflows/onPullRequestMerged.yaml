@@ -126,7 +126,6 @@ jobs:
 
       - name: Create Release Pull Request
         id: cpr
-
         uses: peter-evans/create-pull-request@v3.5.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

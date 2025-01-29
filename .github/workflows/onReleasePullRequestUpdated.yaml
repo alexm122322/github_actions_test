@@ -53,3 +53,4 @@ jobs:
         shell: bash
         run: |
           git add . && git commit -m "chore(release): UPDATED CHANGELOG.md"
+          git push
