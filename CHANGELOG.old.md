@@ -1,11 +1,3 @@
-## v1.0.1
-- 111
-- 222
-- 222
-- 3333
-- qqqq
-- www
-
 ## v1.0.7
 - Added `requestAuthorize` method.
 
