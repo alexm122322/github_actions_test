@@ -52,5 +52,11 @@ jobs:
       - name: Commit changes
         shell: bash
         run: |
-          git add . && git commit -m "chore(release): UPDATED CHANGELOG.md"
-          git push
+          git add CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          
+          git commit -m "chore(release): UPDATED CHANGELOG.md"
+          git push origin "${{ github.ref_name }}"
