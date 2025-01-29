@@ -52,4 +52,4 @@ jobs:
       - name: Commit changes
         shell: bash
         run: |
-          git add . && git commit -m "chore(release): publish ${{ steps.incremented-version.outputs.result }}"
+          git add . && git commit -m "chore(release): UPDATED CHANGELOG.md"
