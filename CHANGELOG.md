@@ -4,7 +4,7 @@
 - 222
 - 3333
 - qqqq
-- www
+- wwww
 
 ## v1.0.7
 - Added `requestAuthorize` method.
