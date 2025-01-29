@@ -111,5 +111,3 @@ jobs:
 
           labels: "Type: Release"
           branch: "release/next"
-
-
