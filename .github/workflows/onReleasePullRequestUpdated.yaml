@@ -42,7 +42,8 @@ jobs:
           # Check if DESCRIPTION is valid
           if [[ -n "$DESCRIPTION" && "$DESCRIPTION" != "null" ]]; then
             if [[ -f "${{ env.CHANGELOG_OLD_FILE }}" ]]; then
-              echo -e "${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_OLD_FILE }})" > ${{ env.CHANGELOG_FILE }}
+              echo "$(cat ${{ env.CHANGELOG_OLD_FILE }})"
+              echo -e "$DESCRIPTION\n\n$(cat ${{ env.CHANGELOG_OLD_FILE }})" > ${{ env.CHANGELOG_FILE }}
             else
               echo "${{ steps.get_description.outputs.DESCRIPTION }}" > ${{ env.CHANGELOG_FILE }}
             fi
