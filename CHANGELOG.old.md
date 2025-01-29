@@ -88,5 +88,3 @@ features for the product-led era.
 ## v0.0.1
 
 - Initialize Frontegg AdminPortal wrapper
-## v1.0.1
-- 111
