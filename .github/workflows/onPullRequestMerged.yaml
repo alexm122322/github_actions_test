@@ -94,23 +94,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          TARGET_LABEL="Type: Release"
-
-          # Fetch open PRs with the target label
-          PRS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" | \
-            jq -r 'map(select(any(.labels[].name == "'"$TARGET_LABEL"'"; .))) | .[].number')
-
-          if [[ -n "$PRS" ]]; then
-            echo "'$TARGET_LABEL' exists" 
+          if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
+            cp "${{ env.CHANGELOG_FILE }}" "${{ env.CHANGELOG_OLD_FILE }}"
           else
-            echo "'$TARGET_LABEL' does not exist"
-            if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
-              cp "${{ env.CHANGELOG_FILE }}" "${{ env.CHANGELOG_OLD_FILE }}"
-            else
-              echo "WARNING: CHANGELOG_FILE does not exist!"
-            fi
+            echo "WARNING: CHANGELOG_FILE does not exist!"
           fi
+          
 
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
