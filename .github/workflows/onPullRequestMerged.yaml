@@ -103,6 +103,10 @@ jobs:
 
           if [[ -n "$PRS" ]]; then
             echo "'$TARGET_LABEL' exists" 
+            # Append PR description to CHANGELOG_FILE safely
+            if [[ -f "${{ env.CHANGELOG_OLD_FILE }}" ]]; then
+              echo -e "${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_OLD_FILE }})" > ${{ env.CHANGELOG_FILE }}
+            fi
           else
             echo "'$TARGET_LABEL' does not exist"
             if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
@@ -114,7 +118,7 @@ jobs:
 
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
-            echo -e "${{ steps.get_description.outputs.DESCRIPTION }}\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
+            echo -e "${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
           else
             echo "${{ steps.get_description.outputs.DESCRIPTION }}" > ${{ env.CHANGELOG_FILE }}
           fi
