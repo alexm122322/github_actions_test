@@ -6,6 +6,8 @@ on:
       - edited
     branches:
       - master
+env:
+  CI: true
 
 jobs:
   build:
