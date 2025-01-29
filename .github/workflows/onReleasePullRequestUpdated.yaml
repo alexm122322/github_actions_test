@@ -95,6 +95,6 @@ jobs:
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
           body: '${{ steps.get_description.outputs.DESCRIPTION }}'
-
+          base: "master"
           labels: "Type: Release"
           branch: "release/next"
