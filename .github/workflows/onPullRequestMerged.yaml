@@ -103,10 +103,6 @@ jobs:
 
           if [[ -n "$PRS" ]]; then
             echo "'$TARGET_LABEL' exists" 
-            # Append PR description to CHANGELOG_FILE safely
-            if [[ -f "${{ env.CHANGELOG_OLD_FILE }}" ]]; then
-              echo -e "${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_OLD_FILE }})" > ${{ env.CHANGELOG_FILE }}
-            fi
           else
             echo "'$TARGET_LABEL' does not exist"
             if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
@@ -127,11 +123,6 @@ jobs:
         shell: bash -ex {0}
         run: |
           git add . && git commit -m "chore(release): publish ${{ steps.incremented-version.outputs.result }}"
-
-      - name: Debug Description
-        shell: bash -ex {0}
-        run: |
-          echo '${{ steps.get_description.outputs.DESCRIPTION }}'
 
       - name: Create Release Pull Request
         id: cpr
