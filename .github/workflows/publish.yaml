@@ -10,9 +10,9 @@ jobs:
       contents: write
       actions: write
       id-token: write # Required for authentication using OIDC
-    #    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+#    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
     name: 'Publish to pub.dev'
-    runs-on: 'macos-latest-large'
+    runs-on: 'ubuntu-last'
     steps:
       - name: Print
         run: echo "DONE"
