@@ -10,7 +10,7 @@ jobs:
   publish:
     if: "contains(join(github.event.pull_request.labels.*.name, ','), 'Release') && github.event.pull_request.merged == true"
     name: 'On Release Merged'
-    runs-on: 'macos-latest-large'
+    runs-on: 'ubuntu-last'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,8 +23,8 @@ jobs:
 
       - name: Git Identity
         run: |
-          git config --global user.name 'frontegg'
-          git config --global user.email 'frontegg@users.noreply.github.com'
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
