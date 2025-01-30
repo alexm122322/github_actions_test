@@ -10,7 +10,7 @@ jobs:
   publish:
     if: "contains(join(github.event.pull_request.labels.*.name, ','), 'Release') && github.event.pull_request.merged == true"
     name: 'On Release Merged'
-    runs-on: 'ubuntu-last'
+    runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
