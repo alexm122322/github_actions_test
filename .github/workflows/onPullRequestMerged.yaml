@@ -103,9 +103,9 @@ jobs:
           
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
-            printf "%s\n\n%s" "${{ steps.get_description.outputs.DESCRIPTION }}" "$(cat "${{ env.CHANGELOG_FILE }}")" > "${{ env.CHANGELOG_FILE }}"
+            echo -e "$DESCRIPTION\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
           else
-            printf "%s" "${{ steps.get_description.outputs.DESCRIPTION }}" > "${{ env.CHANGELOG_FILE }}"
+            echo -e "$DESCRIPTION" > ${{ env.CHANGELOG_FILE }}
           fi
 
       - name: Commit changes
