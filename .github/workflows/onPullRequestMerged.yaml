@@ -101,8 +101,10 @@ jobs:
           fi
           
           DESCRIPTION=$(echo "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g')          
-          printf "%s" "$DESCRIPTION"
-          
+          echo "DEBUG: $DESCRIPTION" >&2
+          echo "DEBUG outputs: ${{ steps.get_description.outputs.DESCRIPTION }}" >&2
+          printf "%s" "${{ steps.get_description.outputs.DESCRIPTION }}"
+
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
             echo "$DESCRIPTION\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
@@ -122,10 +124,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: ${{ secrets.GITHUB_WORKSPACE }}
           commit-message: "Update v${{ steps.incremented-version.outputs.result }}"
-          committer: GitHub <noreply@github.com>
+          committer: GitHub <noreply@github.c
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
           body: '${{ steps.get_description.outputs.DESCRIPTION }}'
 
           labels: "Type: Release"
-          branch: "release/next"
+          brancom>h: "release/next"
