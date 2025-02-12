@@ -104,7 +104,7 @@ jobs:
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
             CHANGELOG_FILE_CONTENT="$(cat ${{ env.CHANGELOG_FILE }})"
             echo -e '${{ steps.get_description.outputs.DESCRIPTION }}' > ${{ env.CHANGELOG_FILE }}
-            echo -e "\n\n$CHANGELOG_FILE_CONTENT" >> ${{ env.CHANGELOG_FILE }}
+            echo -e "\n$CHANGELOG_FILE_CONTENT" >> ${{ env.CHANGELOG_FILE }}
           else
             echo -e '${{ steps.get_description.outputs.DESCRIPTION }}' > ${{ env.CHANGELOG_FILE }}
           fi
