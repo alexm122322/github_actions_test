@@ -101,7 +101,7 @@ jobs:
           fi
           
           DESCRIPTION=$(echo "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g')          
-          printf "%s" "DESCRIPTION"
+          printf "%s" "$DESCRIPTION"
           
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
