@@ -103,12 +103,12 @@ jobs:
           DESCRIPTION=$(echo "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g')          
           echo 'DEBUG: $DESCRIPTION' >&2
           echo 'DEBUG outputs: ${{ steps.get_description.outputs.DESCRIPTION }}' >&2
-
+          
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
-            echo "$DESCRIPTION\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
+            echo -e '${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_FILE }})' > ${{ env.CHANGELOG_FILE }}
           else
-            echo "$DESCRIPTION" > ${{ env.CHANGELOG_FILE }}
+            echo -e '${{ steps.get_description.outputs.DESCRIPTION }}' > ${{ env.CHANGELOG_FILE }}
           fi
 
       - name: Commit changes
