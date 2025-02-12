@@ -100,7 +100,7 @@ jobs:
             echo "WARNING: CHANGELOG_FILE does not exist!"
           fi
           
-          DESCRIPTION = "$DESCRIPTION" | sed 's/`/\\`/g'
+          DESCRIPTION = "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g'
           
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
