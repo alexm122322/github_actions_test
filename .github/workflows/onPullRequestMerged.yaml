@@ -85,7 +85,7 @@ jobs:
           # Store in GitHub Actions output
           {
             echo 'DESCRIPTION<<EOF'
-            echo "$DESCRIPTION"
+            printf "%s\n" "$DESCRIPTION"
             echo 'EOF'
           } >> $GITHUB_OUTPUT
 
