@@ -85,7 +85,7 @@ jobs:
           # Store in GitHub Actions output
           {
             echo 'DESCRIPTION<<EOF'
-            echo "$DESCRIPTION" | sed 's/`/\\`/g' 
+            echo "$DESCRIPTION"
             echo 'EOF'
           } >> $GITHUB_OUTPUT
 
@@ -105,7 +105,7 @@ jobs:
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
             echo -e "${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
           else
-            echo "${{ steps.get_description.outputs.DESCRIPTION }}" > ${{ env.CHANGELOG_FILE }}
+            echo "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g' > ${{ env.CHANGELOG_FILE }}
           fi
 
       - name: Commit changes
