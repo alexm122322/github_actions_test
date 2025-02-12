@@ -100,10 +100,6 @@ jobs:
             echo "WARNING: CHANGELOG_FILE does not exist!"
           fi
           
-          DESCRIPTION=$(echo "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g')          
-          echo 'DEBUG: $DESCRIPTION' >&2
-          echo 'DEBUG outputs: ${{ steps.get_description.outputs.DESCRIPTION }}' >&2
-          
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
             echo -e '${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_FILE }})' > ${{ env.CHANGELOG_FILE }}
@@ -123,10 +119,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: ${{ secrets.GITHUB_WORKSPACE }}
           commit-message: "Update v${{ steps.incremented-version.outputs.result }}"
-          committer: GitHub <noreply@github.c
+          committer: GitHub <noreply@github.com>
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
           title: 'v${{ steps.incremented-version.outputs.result }}'
           body: '${{ steps.get_description.outputs.DESCRIPTION }}'
 
           labels: "Type: Release"
-          brancom>h: "release/next"
+          branch: "release/next"
