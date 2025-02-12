@@ -100,12 +100,12 @@ jobs:
             echo "WARNING: CHANGELOG_FILE does not exist!"
           fi
           
-
+          
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
-            echo -e "${{ steps.get_description.outputs.DESCRIPTION }}\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
+            printf "%s\n\n%s" "${{ steps.get_description.outputs.DESCRIPTION }}" "$(cat "${{ env.CHANGELOG_FILE }}")" > "${{ env.CHANGELOG_FILE }}"
           else
-            echo "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g' > ${{ env.CHANGELOG_FILE }}
+            printf "%s" "${{ steps.get_description.outputs.DESCRIPTION }}" > "${{ env.CHANGELOG_FILE }}"
           fi
 
       - name: Commit changes
