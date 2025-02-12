@@ -101,12 +101,13 @@ jobs:
           fi
           
           DESCRIPTION=$(echo "${{ steps.get_description.outputs.DESCRIPTION }}" | sed 's/`/\\`/g')          
+          echo "$DESCRIPTION"
           
           # Append PR description to CHANGELOG_FILE safely
           if [[ -f "${{ env.CHANGELOG_FILE }}" ]]; then
-            echo -e "$DESCRIPTION\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
+            echo "$DESCRIPTION\n\n$(cat ${{ env.CHANGELOG_FILE }})" > ${{ env.CHANGELOG_FILE }}
           else
-            echo -e "$DESCRIPTION" > ${{ env.CHANGELOG_FILE }}
+            echo "$DESCRIPTION" > ${{ env.CHANGELOG_FILE }}
           fi
 
       - name: Commit changes
